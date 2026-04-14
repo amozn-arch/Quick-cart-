@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Store - Kerala</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f1f3f6; color: #333; }
+        .header { background-color: #232f3e; padding: 15px; color: white; text-align: center; font-size: 20px; font-weight: bold; position: sticky; top: 0; z-index: 100; }
+        
+        /* Product Layout */
+        .container { max-width: 500px; margin: auto; padding: 10px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        img { width: 100%; border-radius: 8px; margin-bottom: 15px; }
+        h3 { margin: 10px 0; font-size: 18px; }
+        .price { color: #B12704; font-size: 26px; font-weight: bold; margin: 5px 0; }
+        .delivery-tag { color: #007600; font-weight: bold; font-size: 14px; margin-bottom: 15px; }
+
+        /* Buttons */
+        .btn-buy { background: #ffd814; border: 1px solid #fcd200; width: 100%; padding: 15px; border-radius: 25px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .btn-buy:hover { background: #f7ca00; }
+        .loc-btn { background: #e7f3f3; border: 1px solid #007185; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; margin: 10px 0; color: #007185; width: 100%; }
+
+        /* Checkout Form */
+        #checkout-form { display: none; }
+        label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 15px; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #007185; text-decoration: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="header">Smart Store</div>
+
+<div class="container">
+    <div id="product-page" class="card">
+        <img src="57176.jpg" alt="Duck Oil Dispenser"> <h3>2 IN 1 Oil Dispenser Bottle (Duck Shape)</h3>
+        <p class="price">₹129</p>
+        <p class="delivery-tag">FREE Delivery | Cash on Delivery Available</p>
+        <p style="font-size: 14px; color: #565959;">ഈ സ്റ്റൈലിഷ് ഡക്ക് ബോട്ടിൽ ഉപയോഗിച്ച് എണ്ണ ഒട്ടും പാഴാക്കാതെ ഉപയോഗിക്കാം. കിച്ചണിന് ഒരു മോഡേൺ ലുക്ക് നൽകുന്നു.</p>
+        <button class="btn-buy" onclick="showCheckout()">Buy Now</button>
+    </div>
+
+    <div id="checkout-form" class="card">
+        <h2 style="margin-top:0;">ഓർഡർ ചെയ്യുക</h2>
+        
+        <label>പേര്:</label>
+        <input type="text" id="custName" placeholder="നിങ്ങളുടെ പേര് ടൈപ്പ് ചെയ്യുക" required>
+        
+        <label>ഫോൺ നമ്പർ:</label>
+        <input type="tel" id="custPhone" placeholder="മൊബൈൽ നമ്പർ" required>
+        
+        <label>ഡെലിവറി അഡ്രസ്സ്:</label>
+        <button type="button" class="loc-btn" onclick="getLocation()">📍 ലൊക്കേഷൻ തനിയെ ചേർക്കുക (Optional)</button>
+        <p id="locStatus" style="font-size: 11px; margin: 0; color: #d9534f;"></p>
+        <textarea id="custAddr" placeholder="വീട്ടുപേര്, സ്ഥലം, പിൻകോഡ് എന്നിവ കൃത്യമായി ടൈപ്പ് ചെയ്യുക" rows="5" required></textarea>
+        
+        <label>പൈസ നൽകേണ്ട രീതി:</label>
+        <select id="payMethod">
+            <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+            <option value="Online Payment">Google Pay / UPI</option>
+        </select>
+        
+        <button class="btn-buy" style="background: #ffa41c; border-color: #ff8f00;" onclick="submitOrder()">Confirm Order via WhatsApp</button>
+        <span class="back-link" onclick="hideCheckout()">← തിരിച്ചു പോകാം</span>
+    </div>
+</div>
+
+<script>
+    function showCheckout() {
+        document.getElementById('product-page').style.display = 'none';
+        document.getElementById('checkout-form').style.display = 'block';
+        window.scrollTo(0,0);
+    }
+
+    function hideCheckout() {
+        document.getElementById('product-page').style.display = 'block';
+        document.getElementById('checkout-form').style.display = 'none';
+    }
+
+    function getLocation() {
+        var status = document.getElementById('locStatus');
+        var addrBox = document.getElementById('custAddr');
+        if (navigator.geolocation) {
+            status.style.color = "#007185";
+            status.innerHTML = "ലൊക്കേഷൻ കണ്ടെത്തുന്നു...";
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+                var mapLink = "https://www.google.com/maps?q=" + lat + "," + lon;
+                addrBox.value = "Map Location: " + mapLink + "\n\nHouse Name: \nPlace: \nPin: ";
+                status.innerHTML = "ലൊക്കേഷൻ ചേർത്തിട്ടുണ്ട്! ✅";
+            }, function() {
+                status.style.color = "#d9534f";
+                status.innerHTML = "ലൊക്കേഷൻ എടുക്കാൻ കഴിഞ്ഞില്ല. നേരിട്ട് ടൈപ്പ് ചെയ്യുക.";
+            });
+        } else {
+            status.innerHTML = "ബ്രൗസർ സപ്പോർട്ട് ചെയ്യുന്നില്ല.";
+        }
+    }
+
+    function submitOrder() {
+        var name = document.getElementById('custName').value;
+        var phone = document.getElementById('custPhone').value;
+        var addr = document.getElementById('custAddr').value;
+        var pay = document.getElementById('payMethod').value;
+        
+        if(name == "" || phone == "" || addr == "") {
+            alert("ദയവായി എല്ലാ വിവരങ്ങളും നൽകുക!");
+            return;
+        }
+
+        var myWhatsAppNumber = "918281923325"; 
+        var product = "Duck Oil Dispenser (₹129)";
+        
+        var message = "🚀 *NEW ORDER RECEIVED* \n" +
+                      "--------------------------\n" +
+                      "*Product:* " + product + "\n" +
+                      "*Customer:* " + name + "\n" +
+                      "*Mobile:* " + phone + "\n" +
+                      "*Address:* " + addr + "\n" +
+                      "*Payment:* " + pay + "\n" +
+                      "--------------------------\n" +
+                      "Please confirm my order!";
+
+        var waUrl = "https://wa.me/" + myWhatsAppNumber + "?text=" + encodeURIComponent(message);
+        window.open(waUrl, '_blank');
+    }
+</script>
+
+</body>
+</html>
