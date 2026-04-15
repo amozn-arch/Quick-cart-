@@ -1,130 +1,113 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Store - Kerala</title>
+    <title>Amozn Arch Online Store</title>
+    <link rel="manifest" href="manifest.json">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f1f3f6; color: #333; }
-        .header { background-color: #232f3e; padding: 15px; color: white; text-align: center; font-size: 20px; font-weight: bold; position: sticky; top: 0; z-index: 100; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background-color: #f8f9fa; text-align: center; }
+        header { background: #232f3e; color: white; padding: 15px; font-size: 24px; font-weight: bold; border-radius: 10px; margin-bottom: 20px; }
+        .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .product-card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 280px; }
+        .product-card img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px; }
+        .product-card h3 { margin: 10px 0; font-size: 18px; color: #333; }
+        .price { color: #b12704; font-size: 22px; font-weight: bold; margin: 5px 0; }
         
-        /* Product Layout */
-        .container { max-width: 500px; margin: auto; padding: 10px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        img { width: 100%; border-radius: 8px; margin-bottom: 15px; }
-        h3 { margin: 10px 0; font-size: 18px; }
-        .price { color: #B12704; font-size: 26px; font-weight: bold; margin: 5px 0; }
-        .delivery-tag { color: #007600; font-weight: bold; font-size: 14px; margin-bottom: 15px; }
+        /* Payment Icons Styling */
+        .payment-methods { margin: 15px 0; padding: 10px; border-top: 1px dashed #ccc; }
+        .payment-methods p { font-size: 12px; color: #666; margin-bottom: 8px; }
+        .pay-icons { display: flex; justify-content: center; gap: 10px; align-items: center; }
+        .pay-icons img { width: 40px; height: auto; filter: grayscale(20%); }
 
-        /* Buttons */
-        .btn-buy { background: #ffd814; border: 1px solid #fcd200; width: 100%; padding: 15px; border-radius: 25px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; }
-        .btn-buy:hover { background: #f7ca00; }
-        .loc-btn { background: #e7f3f3; border: 1px solid #007185; padding: 10px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; margin: 10px 0; color: #007185; width: 100%; }
+        .buy-btn { background: #ffd814; border: none; padding: 12px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
+        .buy-btn:hover { background: #f7ca00; }
 
-        /* Checkout Form */
-        #checkout-form { display: none; }
-        label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 15px; }
-        .back-link { display: block; text-align: center; margin-top: 15px; color: #007185; text-decoration: none; cursor: pointer; }
+        /* Form Styling */
+        #checkout-form { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000; width: 90%; max-width: 350px; }
+        #checkout-form input, #checkout-form select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .submit-btn { background: #2ecc71; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
     </style>
 </head>
 <body>
 
-<div class="header">Smart Store</div>
+<header>Amozn Arch Store</header>
 
 <div class="container">
-    <div id="product-page" class="card">
-        <img src="57176.jpg" alt="Duck Oil Dispenser"> <h3>2 IN 1 Oil Dispenser Bottle (Duck Shape)</h3>
-        <p class="price">₹129</p>
-        <p class="delivery-tag">FREE Delivery | Cash on Delivery Available</p>
-        <p style="font-size: 14px; color: #565959;">ഈ സ്റ്റൈലിഷ് ഡക്ക് ബോട്ടിൽ ഉപയോഗിച്ച് എണ്ണ ഒട്ടും പാഴാക്കാതെ ഉപയോഗിക്കാം. കിച്ചണിന് ഒരു മോഡേൺ ലുക്ക് നൽകുന്നു.</p>
-        <button class="btn-buy" onclick="showCheckout()">Buy Now</button>
+    <div class="product-card">
+        <img src="57176.jpg" alt="Duck Oil Dispenser">
+        <h3>Duck Oil Dispenser</h3>
+        <p class="price">₹149</p>
+        <button class="buy-btn" onclick="openForm('Duck Oil Dispenser', 249)">Buy Now</button>
     </div>
 
-    <div id="checkout-form" class="card">
-        <h2 style="margin-top:0;">ഓർഡർ ചെയ്യുക</h2>
+    <div class="product-card">
+        <img src="sunscreen1.jpg" alt="Sunscreen">
+        <img src="sunscreen2.jpg" alt="Sunscreen">
+        <img src="sunscreen3.jpg" alt="Sunscreen">
+        <img src="sunscreen4.jpg" alt="Sunscreen">
+        <h3>Sunscreen SPF 50</h3>
+        <p class="price">₹127</p>
         
-        <label>പേര്:</label>
-        <input type="text" id="custName" placeholder="നിങ്ങളുടെ പേര് ടൈപ്പ് ചെയ്യുക" required>
-        
-        <label>ഫോൺ നമ്പർ:</label>
-        <input type="tel" id="custPhone" placeholder="മൊബൈൽ നമ്പർ" required>
-        
-        <label>ഡെലിവറി അഡ്രസ്സ്:</label>
-        <button type="button" class="loc-btn" onclick="getLocation()">📍 ലൊക്കേഷൻ തനിയെ ചേർക്കുക (Optional)</button>
-        <p id="locStatus" style="font-size: 11px; margin: 0; color: #d9534f;"></p>
-        <textarea id="custAddr" placeholder="വീട്ടുപേര്, സ്ഥലം, പിൻകോഡ് എന്നിവ കൃത്യമായി ടൈപ്പ് ചെയ്യുക" rows="5" required></textarea>
-        
-        <label>പൈസ നൽകേണ്ട രീതി:</label>
-        <select id="payMethod">
-            <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-            <option value="Online Payment">Google Pay / UPI</option>
-        </select>
-        
-        <button class="btn-buy" style="background: #ffa41c; border-color: #ff8f00;" onclick="submitOrder()">Confirm Order via WhatsApp</button>
-        <span class="back-link" onclick="hideCheckout()">← തിരിച്ചു പോകാം</span>
+        <div class="payment-methods">
+            <p>Accepted Payments:</p>
+            <div class="pay-icons">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Google_Pay_Logo.svg/1200px-Google_Pay_Logo.svg.png" alt="GPay">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/PhonePe_Logo.svg/1200px-PhonePe_Logo.svg.png" alt="PhonePe">
+                <span style="font-size: 10px; font-weight: bold; color: #444;">COD ✅</span>
+            </div>
+        </div>
+
+        <button class="buy-btn" onclick="openForm('Sunscreen SPF 50', 127)">Buy Now</button>
     </div>
 </div>
 
+<div id="overlay" onclick="closeForm()"></div>
+<div id="checkout-form">
+    <h3 id="form-title">Order Details</h3>
+    <input type="text" id="custName" placeholder="Your Name" required>
+    <input type="text" id="custAddress" placeholder="Full Address with Landmark" required>
+    <input type="tel" id="custPhone" placeholder="WhatsApp Number" required>
+    
+    <label style="font-size: 12px; text-align: left; display: block; margin-top: 10px;">Payment Method:</label>
+    <select id="payMethod">
+        <option value="GPay / PhonePe">GPay / PhonePe</option>
+        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+    </select>
+
+    <button class="submit-btn" onclick="sendToWhatsApp()">Order on WhatsApp</button>
+</div>
+
 <script>
-    function showCheckout() {
-        document.getElementById('product-page').style.display = 'none';
+    let selectedProduct = "";
+    let selectedPrice = "";
+
+    function openForm(name, price) {
+        selectedProduct = name;
+        selectedPrice = price;
+        document.getElementById('form-title').innerText = "Order: " + name;
         document.getElementById('checkout-form').style.display = 'block';
-        window.scrollTo(0,0);
+        document.getElementById('overlay').style.display = 'block';
     }
 
-    function hideCheckout() {
-        document.getElementById('product-page').style.display = 'block';
+    function closeForm() {
         document.getElementById('checkout-form').style.display = 'none';
+        document.getElementById('overlay').style.display = 'none';
     }
 
-    function getLocation() {
-        var status = document.getElementById('locStatus');
-        var addrBox = document.getElementById('custAddr');
-        if (navigator.geolocation) {
-            status.style.color = "#007185";
-            status.innerHTML = "ലൊക്കേഷൻ കണ്ടെത്തുന്നു...";
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
-                var mapLink = "https://www.google.com/maps?q=" + lat + "," + lon;
-                addrBox.value = "Map Location: " + mapLink + "\n\nHouse Name: \nPlace: \nPin: ";
-                status.innerHTML = "ലൊക്കേഷൻ ചേർത്തിട്ടുണ്ട്! ✅";
-            }, function() {
-                status.style.color = "#d9534f";
-                status.innerHTML = "ലൊക്കേഷൻ എടുക്കാൻ കഴിഞ്ഞില്ല. നേരിട്ട് ടൈപ്പ് ചെയ്യുക.";
-            });
-        } else {
-            status.innerHTML = "ബ്രൗസർ സപ്പോർട്ട് ചെയ്യുന്നില്ല.";
-        }
-    }
+    function sendToWhatsApp() {
+        const name = document.getElementById('custName').value;
+        const address = document.getElementById('custAddress').value;
+        const phone = document.getElementById('custPhone').value;
+        const method = document.getElementById('payMethod').value;
 
-    function submitOrder() {
-        var name = document.getElementById('custName').value;
-        var phone = document.getElementById('custPhone').value;
-        var addr = document.getElementById('custAddr').value;
-        var pay = document.getElementById('payMethod').value;
+        if(!name || !address || !phone) { alert("Please fill all details!"); return; }
+
+        const whatsappNumber = "8281923325"; 
+        const message = `*NEW ORDER - AMOZN ARCH*%0A---------------------------%0A*Product:* ${selectedProduct}%0A*Price:* ₹${selectedPrice}%0A*Payment:* ${method}%0A---------------------------%0A*Customer:*%0A- Name: ${name}%0A- Address: ${address}%0A- Phone: ${phone}`;
         
-        if(name == "" || phone == "" || addr == "") {
-            alert("ദയവായി എല്ലാ വിവരങ്ങളും നൽകുക!");
-            return;
-        }
-
-        var myWhatsAppNumber = "918281923325"; 
-        var product = "Duck Oil Dispenser (₹129)";
-        
-        var message = "🚀 *NEW ORDER RECEIVED* \n" +
-                      "--------------------------\n" +
-                      "*Product:* " + product + "\n" +
-                      "*Customer:* " + name + "\n" +
-                      "*Mobile:* " + phone + "\n" +
-                      "*Address:* " + addr + "\n" +
-                      "*Payment:* " + pay + "\n" +
-                      "--------------------------\n" +
-                      "Please confirm my order!";
-
-        var waUrl = "https://wa.me/" + myWhatsAppNumber + "?text=" + encodeURIComponent(message);
-        window.open(waUrl, '_blank');
+        window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
     }
 </script>
 
